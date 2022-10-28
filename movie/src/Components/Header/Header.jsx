@@ -1,9 +1,42 @@
 import React, { Component } from 'react';
+import "./Header.css";
 
 class Header extends Component {
-    state = {  } 
+    state = { 
+        newMovieName: "",
+    } ; 
+
+    handleOnChange = (e) =>{
+        let value = e.target.value ;
+        this.setState({
+            newMovieName: value,
+        })
+    }
+
+    handleKeyPress = (e) =>
+    {
+        if(e.key == "Enter")
+        {
+            this.props.setMovies(this.state.newMovieName) ;
+        }
+    }
+
     render() { 
-        return (<h1>Header Component</h1>);
+        return (
+            <div className="header">
+                <div className="logo">
+                    <img src="logo.svg" alt=""/>
+                </div>
+                <div className="search-btn">
+                    <input type="text" 
+                    className="search-movies" 
+                    value={this.state.newMovieName} 
+                    placeholder="Search" 
+                    onChange={this.handleOnChange} 
+                    onKeyPress={this.handleKeyPress}/>
+                </div>
+            </div>
+        );
     }
 }
  

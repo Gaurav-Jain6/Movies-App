@@ -21,8 +21,8 @@ class App extends Component { // cc
     }) ;
     
     // console.log(data) ;
-    let moviesData = data.data.results ;
-    console.log(moviesData) ;
+    let moviesData = data.data.results.slice(0,10) ; // for first 10 results
+    // console.log(moviesData) ;
     this.setState({
       moviesData:moviesData
     })
@@ -30,11 +30,25 @@ class App extends Component { // cc
   
   }
 
+  setMovies = async(newMovieName) =>
+  {
+    let data = await axios.get(API_URL + "/search/movie" , {
+      params: {api_key: API_KEY, page: 1, query: newMovieName },
+    }) ;
+    let moviesData = data.data.results.slice(0,10) ;
+    this.setState({ 
+      moviesData:moviesData,
+      currentMovie:newMovieName
+    })
+  }
+
   render() { 
-    return <div className="App"> 
-      <Header></Header>
+    return( 
+    <div className="App">
+      <Header setMovies={this.setMovies}></Header>
       <Movies movies={this.state.moviesData}></Movies>   
-    </div> ; 
+    </div> 
+    ); 
   }
 }
  
