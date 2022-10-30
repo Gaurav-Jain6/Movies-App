@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
-import {IMAGE_URL} from "../../API/secrets"
+import {API_KEY, API_URL, IMAGE_URL} from "../../API/secrets"
+import { Link } from "react-router-dom" ;
 import "./Movie.css"
+import axios from 'axios';
 
 class Movie extends Component {
     state = {  } 
 
-    componentDidMount()
+    async componentDidMount()
     {
+        // https://api.themoviedb.org/3/movie/299534?api_key=bdd243ea847239dc0799805e63e189f0
+        let response = await axios.get(`${API_URL}/movie/${this.props.movie.id}?api_key=${API_KEY}`)
+        // console.log(response) ;
 
+        let detailedMovieObj = response.data ;
+        let posterPath = IMAGE_URL + detailedMovieObj.poster_path;
+        // console.log(poster_path) ;
+        this.setState({
+            detailedMovieObj: { ...detailedMovieObj, poster_path: posterPath },
+          });
     }
 
 
@@ -17,7 +28,11 @@ class Movie extends Component {
         return (
             <div className='movie-item'>
                 <div className='movie-poster'>
+                <Link
+                    to={{ pathname: "/moviepage", state: this.state.detailedMovieObj }}
+                >
                     <img src={posterPath} alt="" />
+                </Link>
                 </div>
                 <div className="movie-info">
                     <div className="movie-title">{title}</div>

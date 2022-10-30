@@ -4,6 +4,10 @@ import Movies from './Components/Movies/Movies.jsx';
 import Pagination from './Components/Pagination/Pagination.jsx';
 import axios from "axios" ;
 import { API_KEY , API_URL , IMAGE_URL } from "./API/secrets.js"
+import Favourite from "./Components/Favourite/Favourite.jsx";
+import MoviePage from "./Components/MoviePage/MoviePage.jsx";
+
+import { BrowserRouter as Router, Route, Routes, Outlet} from "react-router-dom";
 
 class App extends Component { // cc  
   state = {   
@@ -24,7 +28,7 @@ class App extends Component { // cc
     }) ;
     
     // console.log(data) ;
-    let moviesData = data.data.results.slice(0,10) ; // for first 10 results
+    let moviesData = data.data.results.slice(0, 10); // for first 10 results
     // console.log(moviesData) ;
     let pagesCount = data.data.total_pages ; // 3 for Avengers
     let pages = [];
@@ -46,7 +50,7 @@ class App extends Component { // cc
     let data = await axios.get(API_URL + "/search/movie" , {
       params: {api_key: API_KEY, page: 1, query: newMovieName },
     }) ;
-    let moviesData = data.data.results.slice(0,10) ;
+    let moviesData = data.data.results.slice(0, 10);
     let pagesCount = data.data.total_pages; //3
     let pages = [];
     for (let i = 1; i <= pagesCount; i++) {
@@ -102,7 +106,7 @@ class App extends Component { // cc
     });
 
     // console.log(data) ;
-    let moviesData = data.data.results.slice(0,10) ;
+    let moviesData = data.data.results.slice(0, 10);
     this.setState({
       moviesData:moviesData,
       currPage:pageCount,
@@ -110,29 +114,39 @@ class App extends Component { // cc
   }
 
   render() { 
-    return( 
-    <div className="App">
-      <Header setMovies={this.setMovies}></Header>
-      <Movies movies={this.state.moviesData}></Movies> 
-
-      {/* condition rendering */}
-      {this.state.moviesData.length ? (
-        <React.Fragment>
+    return(
+      <Router>
+        <div className="App">
+          <Header setMovies={this.setMovies}></Header>
           {/* <Movies movies={this.state.moviesData}></Movies>  */}
-          <Pagination
-            pages={this.state.pages}
-            currPage={this.state.currPage}
-            nextPage={this.nextPage}
-            previousPage={this.previousPage}
-            setPage={this.setPage}
-          ></Pagination>
-        </React.Fragment>
-        ) : (
-          <h1>Oops !! No Movies Found</h1>  
-      )}
-    </div> 
+
+          <Routes>
+            <Route path="/" element={<>{/* condition rendering */}
+                {this.state.moviesData.length ? (
+                <React.Fragment>
+                  <Movies movies={this.state.moviesData}></Movies>
+                  <Pagination
+                    pages={this.state.pages}
+                    currPage={this.state.currPage}
+                    nextPage={this.nextPage}
+                    previousPage={this.previousPage}
+                    setPage={this.setPage}
+                  ></Pagination>
+                </React.Fragment>
+                ) : (
+                  <h1>Oops !! No Movies Found</h1>   
+              )}</> }>
+            </Route>
+            <Route path="/fav" exact element={<Favourite/>} ></Route>
+            <Route path="/moviepage" exact element={<MoviePage/>} ></Route>
+          </Routes>
+
+        </div> 
+      </Router> 
     ); 
   }
+
+  
 }
  
 export default App;

@@ -3,6 +3,6 @@
     display: flex ;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    gap:60px ;
+    gap:96px ;
     padding: 20px ;
 }
