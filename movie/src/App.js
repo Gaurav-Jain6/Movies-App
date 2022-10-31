@@ -6,8 +6,7 @@ import axios from "axios" ;
 import { API_KEY , API_URL , IMAGE_URL } from "./API/secrets.js"
 import Favourite from "./Components/Favourite/Favourite.jsx";
 import MoviePage from "./Components/MoviePage/MoviePage.jsx";
-
-import { BrowserRouter as Router, Route, Routes, Outlet} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
 class App extends Component { // cc  
   state = {   
@@ -95,7 +94,6 @@ class App extends Component { // cc
     });
   };
 
-
   setPage = async(pageCount) =>{
     let data = await axios.get(API_URL + "/search/movie", {
       params: {
@@ -118,8 +116,7 @@ class App extends Component { // cc
       <Router>
         <div className="App">
           <Header setMovies={this.setMovies}></Header>
-          {/* <Movies movies={this.state.moviesData}></Movies>  */}
-
+         
           <Routes>
             <Route path="/" element={<>{/* condition rendering */}
                 {this.state.moviesData.length ? (
@@ -138,9 +135,8 @@ class App extends Component { // cc
               )}</> }>
             </Route>
             <Route path="/fav" exact element={<Favourite/>} ></Route>
-            <Route path="/moviepage" exact element={<MoviePage/>} ></Route>
+            <Route path="/moviepage" exact element={<MoviePage />}></Route>
           </Routes>
-
         </div> 
       </Router> 
     ); 
